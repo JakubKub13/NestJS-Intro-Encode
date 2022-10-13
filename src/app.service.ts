@@ -66,4 +66,10 @@ export class AppService {
     });
     return filteredDatabase;
   }
+
+  claimPayment(body: ClaimPaymentDTO) {
+    const element = this.database.find((entry) => entry.id === body.id);
+    if (!element) throw new HttpException("Not Found", 404);
+    return body.secret === element.secret;
+  }
 }
