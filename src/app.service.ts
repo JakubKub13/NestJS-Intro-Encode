@@ -4,6 +4,12 @@ import * as TokenJson from "./assets/MyERC20Vote.json";
 
 const CONTRACT_ADDRESS = "0x9828c2Ad0A705F3E8D21FE31A1a5edBFDfc67e1f"; 
 
+export class ClaimPaymentDTO {
+  id: string;
+  secret: string;
+  address: string;
+}
+
 export class PaymentOrder {
   id: string;
   secret: string;
