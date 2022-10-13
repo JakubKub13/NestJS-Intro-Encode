@@ -70,6 +70,9 @@ export class AppService {
   claimPayment(body: ClaimPaymentDTO) {
     const element = this.database.find((entry) => entry.id === body.id);
     if (!element) throw new HttpException("Not Found", 404);
-    return body.secret === element.secret;
+    if (body.secret != element.secret) return false;
+    // Todo mint tokens here
   }
 }
+
+
