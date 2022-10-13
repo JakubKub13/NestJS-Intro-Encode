@@ -53,6 +53,10 @@ export class AppService {
   }
 
   listPaymentOrders() {
-    return this.database;
+    const filteredDatabase = [];
+    this.database.forEach(element => {
+      filteredDatabase.push({id: element.id, amount: element.amount});
+    });
+    return filteredDatabase;
   }
 }
