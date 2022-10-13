@@ -47,4 +47,12 @@ export class AppService {
   createPaymentOrder(body: PaymentOrder) {
     this.database.push(body);
   }
+
+  getPaymentOrderById(id: string) {
+
+  }
+
+  listPaymentOrders() {
+    return this.database;
+  }
 }

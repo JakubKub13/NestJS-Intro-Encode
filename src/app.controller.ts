@@ -25,8 +25,14 @@ export class AppController {
     return this.appService.getTransactionReceiptByHash(hash);
   }
 
+  @Get('list-payment-orders')
+  listPaymentOrders() {
+    return this.appService.listPaymentOrders();
+  }
+
   @Post('create-order')
   createOrder(@Body() body: PaymentOrder ) {
+    console.log({body});
     this.appService.createPaymentOrder(body);
   }
 }
