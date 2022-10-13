@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { ethers } from 'ethers';
-import * as dotenv from "dotenv";
 import * as TokenJson from "./assets/MyERC20Vote.json";
 
 const CONTRACT_ADDRESS = "0x9828c2Ad0A705F3E8D21FE31A1a5edBFDfc67e1f"; 
@@ -49,7 +48,9 @@ export class AppService {
   }
 
   getPaymentOrderById(id: string) {
-
+    const element = this.database.find((entry) => entry.id === id);
+    if (!element) return false;
+    return { id: element.id, amount: element.amount };
   }
 
   listPaymentOrders() {

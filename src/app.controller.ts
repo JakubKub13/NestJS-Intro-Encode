@@ -30,6 +30,11 @@ export class AppController {
     return this.appService.listPaymentOrders();
   }
 
+  @Get('get-payment-order')
+  getPaymentOrder(@Query("id") id: string) {
+    return this.appService.getPaymentOrderById(id);
+  }
+
   @Post('create-order')
   createOrder(@Body() body: PaymentOrder ) {
     console.log({body});
