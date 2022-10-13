@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { ethers } from 'ethers';
 import * as TokenJson from "./assets/MyERC20Vote.json";
 
@@ -49,7 +49,7 @@ export class AppService {
 
   getPaymentOrderById(id: string) {
     const element = this.database.find((entry) => entry.id === id);
-    if (!element) return false;
+    if (!element) throw new HttpException("Not Found", 404);
     return { id: element.id, amount: element.amount };
   }
 
