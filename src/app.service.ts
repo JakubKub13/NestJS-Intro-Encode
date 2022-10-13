@@ -67,11 +67,14 @@ export class AppService {
     return filteredDatabase;
   }
 
-  claimPayment(body: ClaimPaymentDTO) {
+  async claimPayment(body: ClaimPaymentDTO) {
     const element = this.database.find((entry) => entry.id === body.id);
     if (!element) throw new HttpException("Not Found", 404);
     if (body.secret != element.secret) return false;
+    const wallet = ethers.Wallet //-------------HERE continue
     // Todo mint tokens here
+    const tx = await this.contract.mint(body.address, ethers.utils.parseEther(element.amount.toString()));
+
   }
 }
 
