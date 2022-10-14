@@ -1,8 +1,12 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { ethers } from 'ethers';
 import * as TokenJson from "./assets/MyERC20Vote.json";
+import * as dotenv from "dotenv";
+dotenv.config();
 
 const CONTRACT_ADDRESS = "0x9828c2Ad0A705F3E8D21FE31A1a5edBFDfc67e1f"; 
+const privateKey1 = process.env.PRIVATE_KEY;
+
 
 export class ClaimPaymentDTO {
   id: string;
@@ -71,7 +75,7 @@ export class AppService {
     const element = this.database.find((entry) => entry.id === body.id);
     if (!element) throw new HttpException("Not Found", 404);
     if (body.secret != element.secret) return false;
-    const wallet = ethers.Wallet //-------------HERE continue
+    const wallet = new ethers.Wallet(privateKey1, this.provider);
     // Todo mint tokens here
     const tx = await this.contract.mint(body.address, ethers.utils.parseEther(element.amount.toString()));
 
