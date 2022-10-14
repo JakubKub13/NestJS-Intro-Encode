@@ -5,6 +5,11 @@ import { AppService, PaymentOrder, ClaimPaymentDTO } from './app.service';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
+  @Get('token-address')
+  getTokenAddress() {
+    return this.appService.getTokenAddress();
+  }
+
   @Get('total-supply')
   getTotalSupply() {
     return this.appService.getTotalSupply();

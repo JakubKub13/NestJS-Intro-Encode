@@ -32,6 +32,11 @@ export class AppService {
     this.contract = new ethers.Contract(CONTRACT_ADDRESS, TokenJson.abi, this.provider);  
     this.database = [];
   }
+
+  getTokenAddress() {
+    return CONTRACT_ADDRESS;
+  }
+
   async getTotalSupply() {
     const totalSupplyBn = await this.contract.totalSupply();
     const totalSupply = ethers.utils.formatEther(totalSupplyBn);
