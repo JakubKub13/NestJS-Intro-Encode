@@ -40,7 +40,7 @@ export class AppService {
   async getTotalSupply() {
     const totalSupplyBn = await this.contract.totalSupply();
     const totalSupply = ethers.utils.formatEther(totalSupplyBn);
-    return totalSupply;
+    return {result: totalSupply};
   }
 
   async getAllowance(from: string, to: string) {
