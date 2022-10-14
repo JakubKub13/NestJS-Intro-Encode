@@ -34,7 +34,7 @@ export class AppService {
   }
 
   getTokenAddress() {
-    return CONTRACT_ADDRESS;
+    return {result: CONTRACT_ADDRESS};
   }
 
   async getTotalSupply() {
