@@ -50,5 +50,10 @@ export class AppController {
   claimPayment(@Body() body: ClaimPaymentDTO) {
     return this.appService.claimPayment(body);
   }
+
+  @Post('request-voting-tokens')
+  request(@Body() body: any) {
+    return this.appService.requestTokens(body);
+  }
 }
 

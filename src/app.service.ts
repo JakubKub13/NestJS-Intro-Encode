@@ -87,6 +87,10 @@ export class AppService {
     const tx = await signedContract.mint(body.address, ethers.utils.parseEther(element.amount.toString()));
     return tx;
   }
+
+  requestTokens(body: any) {
+    return { result: true };
+  }
 }
 
 
