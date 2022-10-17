@@ -71,6 +71,11 @@ export class AppController {
     return this.appService.delegate(body);
   }
 
+  @Post('reference-block')
+  referenceBlock(@Body() body: ReferenceBlock) {
+    return this.appService.referenceBlock(body);
+  }
+
  
 
 }

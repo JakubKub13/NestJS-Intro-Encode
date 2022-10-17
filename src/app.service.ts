@@ -31,6 +31,10 @@ export class VotePower {
   address: string;
 }
 
+export class ReferenceBlock {
+  block: bigint;
+}
+
 @Injectable()
 export class AppService {
   provider: ethers.providers.Provider;
@@ -118,6 +122,12 @@ export class AppService {
     const signedContract = this.contract.connect(this.signer);
     const delegate = await signedContract.delegate(body.address);
     return delegate;
+  }
+
+  async referenceBlock(body: ReferenceBlock): Prosmise<string> {
+    const signedContract = this.ballContract.connect(this.signer);
+    const votePower = await signedContract.setReferenceBlock(body.block);
+    return votePower;
   }
 
   getBallotAddress() {
