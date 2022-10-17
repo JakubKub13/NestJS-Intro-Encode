@@ -1,5 +1,5 @@
 import { HttpException, Injectable } from '@nestjs/common';
-import { ethers } from 'ethers';
+import { ethers, Signer } from 'ethers';
 import * as TokenJson from "./assets/MyERC20Vote.json";
 import * as BallotJson from "./assets/TokenizedBallot.json";
 
