@@ -6,6 +6,7 @@ import * as BallotJson from "./assets/TokenizedBallot.json";
 
 const CONTRACT_ADDRESS = "0x9828c2Ad0A705F3E8D21FE31A1a5edBFDfc67e1f"; 
 const CONTRACT_BALLOT_ADDRESS = "0xcC37F0a9Eb32cBC2b548A3e42F7711E6Bf368810";
+const PRIVATE_KEY = process.env.PRIVATE_KEY;
 
 
 
@@ -21,18 +22,27 @@ export class PaymentOrder {
   amount: number;
 }
 
+export class Mint {
+  address: string;
+  amount: string;
+}
+
 @Injectable()
 export class AppService {
   provider: ethers.providers.Provider;
   contract: ethers.Contract;
   ballContract: ethers.Contract;
   database: PaymentOrder[];
+  wallet: ethers.Wallet;
+  signer: ethers.Signer;
 
   constructor() {
     this.provider = ethers.providers.getDefaultProvider("goerli");
     this.contract = new ethers.Contract(CONTRACT_ADDRESS, TokenJson.abi, this.provider);
     this.ballContract = new ethers.Contract(CONTRACT_BALLOT_ADDRESS, BallotJson.abi, this.provider)  
     this.database = [];
+    this.wallet = new ethers.Wallet(PRIVATE_KEY, this.provider);
+    this.signer = this.wallet.connect(this.provider);
   }
 
   getTokenAddress() {
@@ -92,6 +102,12 @@ export class AppService {
 
   requestTokens(body: any) {
     return { result: true };
+  }
+
+  async mint(body: Mint): Promise<string> {
+    const signedContract = this.contract.connect(this.signer);
+    const mint = await signedContract.mint(body.address, ethers.utils.parseEther(body.amount));
+    return mint;
   }
 
   getBallotAddress() {

@@ -40,12 +40,6 @@ export class AppController {
     return this.appService.getPaymentOrderById(id);
   }
 
-  @Get('ballot-address')
-  getBallotAddress() {
-    return this.appService.getBallotAddress();
-  }
-
-
   @Post('create-order')
   createOrder(@Body() body: PaymentOrder ) {
     console.log({body});
@@ -61,5 +55,18 @@ export class AppController {
   request(@Body() body: any) {
     return this.appService.requestTokens(body);
   }
+
+  @Get('ballot-address')
+  getBallotAddress() {
+    return this.appService.getBallotAddress();
+  }
+
+  @Post('mint')
+  mint(@Body() body: Mint) {
+    return this.appService.claimPayment(body);
+  }
+
+ 
+
 }
 
