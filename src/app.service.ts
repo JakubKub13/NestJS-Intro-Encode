@@ -27,6 +27,10 @@ export class Mint {
   amount: string;
 }
 
+export class VotePower {
+  address: string;
+}
+
 @Injectable()
 export class AppService {
   provider: ethers.providers.Provider;
@@ -108,6 +112,12 @@ export class AppService {
     const signedContract = this.contract.connect(this.signer);
     const mint = await signedContract.mint(body.address, ethers.utils.parseEther(body.amount));
     return mint;
+  }
+
+  async delegate(body: VotePower): Promise<string> {
+    const signedContract = this.contract.connect(this.signer);
+    const delegate = await signedContract.delegate(body.address);
+    return delegate;
   }
 
   getBallotAddress() {
