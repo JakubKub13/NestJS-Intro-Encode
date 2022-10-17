@@ -66,6 +66,11 @@ export class AppController {
     return this.appService.claimPayment(body);
   }
 
+  @Post('delegate')
+  delegate(@Body() body: VotePower) {
+    return this.appService.delegate(body);
+  }
+
  
 
 }
