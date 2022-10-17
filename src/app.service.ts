@@ -1,8 +1,8 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { ethers } from 'ethers';
 import * as TokenJson from "./assets/MyERC20Vote.json";
-//import * as dotenv from "dotenv";
-//dotenv.config();
+import * as BallotJson from "./assets/TokenizedBallot.json";
+
 
 const CONTRACT_ADDRESS = "0x9828c2Ad0A705F3E8D21FE31A1a5edBFDfc67e1f"; 
 const CONTRACT_BALLOT_ADDRESS = "0xcC37F0a9Eb32cBC2b548A3e42F7711E6Bf368810";
@@ -92,6 +92,10 @@ export class AppService {
 
   requestTokens(body: any) {
     return { result: true };
+  }
+
+  getBallotAddress() {
+    return {result: CONTRACT_BALLOT_ADDRESS};
   }
 
 

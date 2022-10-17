@@ -40,6 +40,12 @@ export class AppController {
     return this.appService.getPaymentOrderById(id);
   }
 
+  @Get('ballot-address')
+  getBallotAddress() {
+    return this.appService.getBallotAddress();
+  }
+
+
   @Post('create-order')
   createOrder(@Body() body: PaymentOrder ) {
     console.log({body});
