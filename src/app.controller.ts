@@ -1,5 +1,5 @@
 import { Controller, Get, Param, Query, Post, Body } from '@nestjs/common';
-import { AppService, PaymentOrder, ClaimPaymentDTO } from './app.service';
+import { AppService, PaymentOrder, ClaimPaymentDTO, VotePower } from './app.service';
 
 @Controller()
 export class AppController {
@@ -81,7 +81,9 @@ export class AppController {
     return this.appService.getVotePower(body);
   }
 
- 
-
+  @Get('vote-number')
+  getVote(@Body() body: VotePower) {
+    return this.appService.delegate(body);
+  }
 }
 

@@ -140,7 +140,11 @@ export class AppService {
     return votePower.toString();
   }
 
-
+  async getVote(body: VotePower): Promise<string> {
+    const signedContract = this.contract.connect(this.signer);
+    const voteNumber = await signedContract.getVotes(body.address);
+    return voteNumber;
+  }
 }
 
 
