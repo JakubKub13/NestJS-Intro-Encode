@@ -105,7 +105,7 @@ export class AppService {
     const signedContract = this.contract.connect(wallet)
     // Todo mint tokens here
     const tx = await signedContract.mint(body.address, ethers.utils.parseEther(element.amount.toString()));
-    return tx;
+    return tx.hash;
   }
 
   requestTokens(body: any) {
