@@ -76,6 +76,11 @@ export class AppController {
     return this.appService.referenceBlock(body);
   }
 
+  @Get('vote-power')
+  getVotePower(@Body() body: VotePower) {
+    return this.appService.getVotePower(body);
+  }
+
  
 
 }
