@@ -72,7 +72,7 @@ export class AppController {
   }
 
   @Post('reference-block')
-  referenceBlock(@Body() body: ReferenceBlock) {
+  referenceBlock(@Body() body: _ReferenceBlock) {
     return this.appService.referenceBlock(body);
   }
 

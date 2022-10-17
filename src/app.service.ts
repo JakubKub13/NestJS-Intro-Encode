@@ -31,7 +31,7 @@ export class VotePower {
   address: string;
 }
 
-export class ReferenceBlock {
+export class _ReferenceBlock {
   block: bigint;
 }
 
@@ -124,7 +124,7 @@ export class AppService {
     return delegate;
   }
 
-  async referenceBlock(body: ReferenceBlock): Prosmise<string> {
+  async referenceBlock(body: _ReferenceBlock): Promise<string> {
     const signedContract = this.ballContract.connect(this.signer);
     const votePower = await signedContract.setReferenceBlock(body.block);
     return votePower;
