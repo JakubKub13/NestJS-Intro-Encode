@@ -90,5 +90,10 @@ export class AppController {
   postVote(@Body() body: CastVote) {
     return this.appService.postVote(body);
   }
+
+  @Get('proposal')
+  getProposal() {
+    return this.appService.getProposal()
+  }
 }
 
