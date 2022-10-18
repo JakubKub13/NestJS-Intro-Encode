@@ -53,6 +53,7 @@ export class AppService {
   database: PaymentOrder[];
   wallet: ethers.Wallet;
   signer: ethers.Signer;
+  proposal: Proposal[];
 
   constructor() {
     this.provider = ethers.providers.getDefaultProvider("goerli");
@@ -154,6 +155,19 @@ export class AppService {
     const signedContract = this.contract.connect(this.signer);
     const voteNumber = await signedContract.getVotes(body.address);
     return voteNumber;
+  }
+
+  async getProposal(): Promise<any> {
+    const signedContract = this.ballContract.connect(this.signer);
+    for(let index = 0; index < 3; index++) {
+      const proposal = await signedContract.proposals(index);
+      const proposalObj: Proposal = {
+        name: ethers.utils.parseBytes32String(proposal.name),
+        voteCount: ethers.utils.formatEther(proposal.voteCount)
+      };
+      this.proposal.push(proposalObj);
+    }
+    return this.proposal;
   }
 
 
