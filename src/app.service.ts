@@ -1,27 +1,28 @@
 import { HttpException, Injectable } from '@nestjs/common';
-import { ethers, Signer } from 'ethers';
+import { ethers } from 'ethers';
 import * as TokenJson from "./assets/MyERC20Vote.json";
 import * as BallotJson from "./assets/TokenizedBallot.json";
 require('dotenv').config();
-
-
 
 const CONTRACT_ADDRESS = "0x9828c2Ad0A705F3E8D21FE31A1a5edBFDfc67e1f"; 
 const CONTRACT_BALLOT_ADDRESS = "0xcC37F0a9Eb32cBC2b548A3e42F7711E6Bf368810";
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 
+export class PaymentOrder {
+  id: string;
+  secret: string;
+  amount: number;
+}
 
+export class Proposal {
+  name: string;
+  voteCount: string;
+}
 
 export class ClaimPaymentDTO {
   id: string;
   secret: string;
   address: string;
-}
-
-export class PaymentOrder {
-  id: string;
-  secret: string;
-  amount: number;
 }
 
 export class Mint {
@@ -33,18 +34,13 @@ export class VotePower {
   address: string;
 }
 
-export class ReferenceBlock {
-  block: bigint;
-}
-
-export class Proposal {
-  name: string;
-  voteCount: string;
-}
-
 export class CastVote {
   proposalIndex: number;
   amount: string;
+}
+
+export class ReferenceBlock {
+  block: bigint;
 }
 
 @Injectable()
@@ -54,7 +50,6 @@ export class AppService {
   ballContract: ethers.Contract;
   database: PaymentOrder[];
   wallet: ethers.Wallet;
-  signer: ethers.Signer;
   proposal: Proposal[];
 
   constructor() {
@@ -63,6 +58,7 @@ export class AppService {
     this.ballContract = new ethers.Contract(CONTRACT_BALLOT_ADDRESS, BallotJson.abi, this.provider)  
     this.database = [];
     this.wallet = new ethers.Wallet(PRIVATE_KEY, this.provider);
+    this.proposal = [];
   }
 
   getTokenAddress() {
@@ -127,29 +123,21 @@ export class AppService {
   async mint(body: Mint): Promise<string> {
     const signedContract = this.contract.connect(this.wallet);
     const mint = await signedContract.mint(body.address, ethers.utils.parseEther(body.amount));
-    return mint;
+    const tx = await mint.wait(1);
+    return tx;
   }
 
   async delegate(body: VotePower): Promise<string> {
     const signedContract = this.contract.connect(this.wallet);
     const delegate = await signedContract.delegate(body.address);
-    return delegate;
+    const tx = await delegate.wait(1);
+    return tx;
   }
 
-  async referenceBlock(body: ReferenceBlock): Promise<string> {
-    const signedContract = this.ballContract.connect(this.wallet);
-    const votePower = await signedContract.setReferenceBlock(body.block);
-    return votePower;
-  }
-
-  getBallotAddress() {
-    return {result: CONTRACT_BALLOT_ADDRESS};
-  }
-
-  async getVotePower(body: VotePower): Promise<string> {
-    const signedContract = this.ballContract.connect(this.wallet);
-    const votePower = await signedContract.votePower(body.address);
-    return votePower.toString();
+  async getVote(body: VotePower): Promise<string> {
+    const signedContract = this.contract.connect(this.wallet);
+    const voteNumber = await signedContract.getVotes(body.address);
+    return voteNumber.toString();
   }
 
   async votePowerSpent(body: VotePower): Promise<string> {
@@ -158,10 +146,20 @@ export class AppService {
     return votePowerSpent.toString();
   }
 
-  async getVote(body: VotePower): Promise<string> {
-    const signedContract = this.contract.connect(this.wallet);
-    const voteNumber = await signedContract.getVotes(body.address);
-    return voteNumber;
+  async getVotePower(body: VotePower): Promise<string> {
+    const signedContract = this.ballContract.connect(this.wallet);
+    const votePower = await signedContract.votePower(body.address);
+    return votePower.toString();
+  }
+
+  async postVote(body: CastVote): Promise<string> {
+    const signedContract = this.ballContract.connect(this.wallet);
+    const voting = await signedContract.vote(
+      body.proposalIndex,
+      ethers.utils.parseEther(body.amount)
+    );
+    const tx = await voting.wait(1);
+    return tx;
   }
 
   async getProposal(): Promise<any> {
@@ -177,14 +175,14 @@ export class AppService {
     return this.proposal;
   }
 
-  async postVote(body: CastVote): Promise<string> {
+  async referenceBlock(body: ReferenceBlock): Promise<string> {
     const signedContract = this.ballContract.connect(this.wallet);
-    const voting = await signedContract.vote(
-      body.proposalIndex,
-      ethers.utils.parseEther(body.amount)
-    );
-    const tx = await voting.wait(1);
-    return tx;
+    const votePower = await signedContract.setReferenceBlock(body.block);
+    return votePower.toString();
+  }
+
+  getBallotAddress() {
+    return {result: CONTRACT_BALLOT_ADDRESS};
   }
 }
 
