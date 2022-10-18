@@ -83,7 +83,7 @@ export class AppController {
 
   @Get('vote-number')
   getVote(@Body() body: VotePower) {
-    return this.appService.delegate(body);
+    return this.appService.getVote(body);
   }
 
   @Post('vote')
