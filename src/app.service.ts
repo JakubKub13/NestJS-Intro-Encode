@@ -170,7 +170,15 @@ export class AppService {
     return this.proposal;
   }
 
-
+  async postVote(body: CastVote): Promise<string> {
+    const signedContract = this.ballContract.connect(this.signer);
+    const voting = await signedContract.vote(
+      body.proposalIndex,
+      ethers.utils.parseEther(body.amount)
+    );
+    const tx = await voting.wait(1);
+    return tx;
+  }
 }
 
 
