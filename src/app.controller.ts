@@ -95,5 +95,10 @@ export class AppController {
   getProposal() {
     return this.appService.getProposal()
   }
+
+  @Get('vote-spent') 
+  votePowerSpent(@Body() body: VotePower) {
+    return this.appService.votePowerSpent(body);
+  }
 }
 

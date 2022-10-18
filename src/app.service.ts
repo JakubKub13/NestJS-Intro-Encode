@@ -152,6 +152,12 @@ export class AppService {
     return votePower.toString();
   }
 
+  async votePowerSpent(body: VotePower): Promise<string> {
+    const signedContract = this.ballContract.connect(this.wallet);
+    const votePowerSpent = await signedContract.votePowerSpent(body.address);
+    return votePowerSpent.toString();
+  }
+
   async getVote(body: VotePower): Promise<string> {
     const signedContract = this.contract.connect(this.wallet);
     const voteNumber = await signedContract.getVotes(body.address);
