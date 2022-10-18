@@ -29,11 +29,6 @@ export class Mint {
   address: string;
   amount: string;
 }
-
-export class VotePower {
-  address: string;
-}
-
 export class CastVote {
   proposalIndex: number;
   amount: string;
@@ -134,21 +129,21 @@ export class AppService {
     return tx;
   }
 
-  async getVote(body: VotePower): Promise<string> {
+  async getVote(address: string) {
     const signedContract = this.contract.connect(this.wallet);
-    const voteNumber = await signedContract.getVotes(body.address);
+    const voteNumber = await signedContract.getVotes(address);
     return voteNumber.toString();
   }
 
-  async votePowerSpent(body: VotePower): Promise<string> {
+  async votePowerSpent(address: string) {
     const signedContract = this.ballContract.connect(this.wallet);
-    const votePowerSpent = await signedContract.votePowerSpent(body.address);
+    const votePowerSpent = await signedContract.votePowerSpent(address);
     return votePowerSpent.toString();
   }
 
-  async getVotePower(body: VotePower): Promise<string> {
+  async getVotePower(address: string) {
     const signedContract = this.ballContract.connect(this.wallet);
-    const votePower = await signedContract.votePower(body.address);
+    const votePower = await signedContract.votePower(address);
     return votePower.toString();
   }
 

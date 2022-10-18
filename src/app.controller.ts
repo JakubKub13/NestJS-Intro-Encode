@@ -52,18 +52,18 @@ export class AppController {
   }
 
   @Get('vote-power')
-  getVotePower(@Body() body: VotePower) {
-    return this.appService.getVotePower(body);
+  getVotePower(@Query("address") address: string) {
+    return this.appService.getVotePower(address);
   }
 
   @Get('vote-number')
-  getVote(@Body() body: VotePower) {
-    return this.appService.getVote(body);
+  getVote(@Query("address") address: string) {
+    return this.appService.getVote(address);
   }
 
   @Get('vote-spent') 
-  votePowerSpent(@Body() body: VotePower) {
-    return this.appService.votePowerSpent(body);
+  votePowerSpent(@Query("address") address: string) {
+    return this.appService.votePowerSpent(address);
   }
 
   @Get('proposal')
