@@ -2,6 +2,8 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { ethers, Signer } from 'ethers';
 import * as TokenJson from "./assets/MyERC20Vote.json";
 import * as BallotJson from "./assets/TokenizedBallot.json";
+require('dotenv').config();
+
 
 
 const CONTRACT_ADDRESS = "0x9828c2Ad0A705F3E8D21FE31A1a5edBFDfc67e1f"; 
