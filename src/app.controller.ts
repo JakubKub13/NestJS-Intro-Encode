@@ -1,5 +1,5 @@
 import { Controller, Get, Param, Query, Post, Body } from '@nestjs/common';
-import { AppService, PaymentOrder, ClaimPaymentDTO, VotePower } from './app.service';
+import { AppService, PaymentOrder, ClaimPaymentDTO, VotePower, ReferenceBlock, Mint, CastVote} from './app.service';
 
 @Controller()
 export class AppController {
@@ -72,7 +72,7 @@ export class AppController {
   }
 
   @Post('reference-block')
-  referenceBlock(@Body() body: _ReferenceBlock) {
+  referenceBlock(@Body() body: ReferenceBlock) {
     return this.appService.referenceBlock(body);
   }
 
@@ -85,5 +85,7 @@ export class AppController {
   getVote(@Body() body: VotePower) {
     return this.appService.delegate(body);
   }
+
+  
 }
 
