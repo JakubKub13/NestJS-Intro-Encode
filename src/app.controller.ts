@@ -20,45 +20,10 @@ export class AppController {
     return this.appService.getAllowance(from, to);
   }
 
-  @Get('transaction-by-hash/:hash')
-  getTransactionByHash(@Param('hash') hash: string) {
-    return this.appService.getTransactionByHash(hash);
-  }
-
-  @Get('transaction-receipt-by-hash/:hash')
-  getTransactionReceiptByHash(@Param('hash') hash: string) {
-    return this.appService.getTransactionReceiptByHash(hash);
-  }
-
-  @Get('list-payment-orders')
-  listPaymentOrders() {
-    return this.appService.listPaymentOrders();
-  }
-
-  @Get('get-payment-order')
-  getPaymentOrder(@Query("id") id: string) {
-    return this.appService.getPaymentOrderById(id);
-  }
-
   @Post('create-order')
   createOrder(@Body() body: PaymentOrder ) {
     console.log({body});
     this.appService.createPaymentOrder(body);
-  }
-
-  @Post('claim-payment')
-  claimPayment(@Body() body: ClaimPaymentDTO) {
-    return this.appService.claimPayment(body);
-  }
-
-  @Post('request-voting-tokens')
-  request(@Body() body: any) {
-    return this.appService.requestTokens(body);
-  }
-
-  @Get('ballot-address')
-  getBallotAddress() {
-    return this.appService.getBallotAddress();
   }
 
   @Post('mint')
@@ -66,14 +31,24 @@ export class AppController {
     return this.appService.mint(body);
   }
 
-  @Post('delegate')
-  delegate(@Body() body: VotePower) {
-    return this.appService.delegate(body);
-  }
-
   @Post('reference-block')
   referenceBlock(@Body() body: ReferenceBlock) {
     return this.appService.referenceBlock(body);
+  }
+
+  @Post('claim-payment')
+  claimPayment(@Body() body: ClaimPaymentDTO) {
+    return this.appService.claimPayment(body);
+  }
+
+  @Get('get-payment-order')
+  getPaymentOrder(@Query("id") id: string) {
+    return this.appService.getPaymentOrderById(id);
+  }
+
+  @Get('list-payment-orders')
+  listPaymentOrders() {
+    return this.appService.listPaymentOrders();
   }
 
   @Get('vote-power')
@@ -86,9 +61,9 @@ export class AppController {
     return this.appService.getVote(body);
   }
 
-  @Post('vote')
-  postVote(@Body() body: CastVote) {
-    return this.appService.postVote(body);
+  @Get('vote-spent') 
+  votePowerSpent(@Body() body: VotePower) {
+    return this.appService.votePowerSpent(body);
   }
 
   @Get('proposal')
@@ -96,9 +71,34 @@ export class AppController {
     return this.appService.getProposal()
   }
 
-  @Get('vote-spent') 
-  votePowerSpent(@Body() body: VotePower) {
-    return this.appService.votePowerSpent(body);
+  @Post('delegate')
+  delegate(@Body() body: VotePower) {
+    return this.appService.delegate(body);
   }
+
+  @Post('vote')
+  postVote(@Body() body: CastVote) {
+    return this.appService.postVote(body);
+  }
+
+  @Get('transaction-by-hash/:hash')
+  getTransactionByHash(@Param('hash') hash: string) {
+    return this.appService.getTransactionByHash(hash);
+  }
+
+  @Get('transaction-receipt-by-hash/:hash')
+  getTransactionReceiptByHash(@Param('hash') hash: string) {
+    return this.appService.getTransactionReceiptByHash(hash);
+  }
+
+  @Post('request-voting-tokens')
+  request(@Body() body: any) {
+    return this.appService.requestTokens(body);
+  }
+
+  @Get('ballot-address')
+  getBallotAddress() {
+    return this.appService.getBallotAddress();
+  }  
 }
 
