@@ -63,7 +63,7 @@ export class AppController {
 
   @Post('mint')
   mint(@Body() body: Mint) {
-    return this.appService.claimPayment(body);
+    return this.appService.mint(body);
   }
 
   @Post('delegate')
