@@ -1,5 +1,5 @@
 import { Controller, Get, Param, Query, Post, Body } from '@nestjs/common';
-import { AppService, PaymentOrder, ClaimPaymentDTO, VotePower, ReferenceBlock, Mint, CastVote} from './app.service';
+import { AppService, PaymentOrder, ClaimPaymentDTO, VotePower, Mint, CastVote} from './app.service';
 
 @Controller()
 export class AppController {
@@ -29,11 +29,6 @@ export class AppController {
   @Post('mint')
   mint(@Body() body: Mint) {
     return this.appService.mint(body);
-  }
-
-  @Post('reference-block')
-  referenceBlock(@Body() body: ReferenceBlock) {
-    return this.appService.referenceBlock(body);
   }
 
   @Post('claim-payment')

@@ -5,7 +5,7 @@ import * as BallotJson from "./assets/TokenizedBallot.json";
 require('dotenv').config();
 
 const CONTRACT_ADDRESS = "0x9828c2Ad0A705F3E8D21FE31A1a5edBFDfc67e1f"; 
-const CONTRACT_BALLOT_ADDRESS = "0xcC37F0a9Eb32cBC2b548A3e42F7711E6Bf368810";
+const CONTRACT_BALLOT_ADDRESS = "0x7EC3AcF0612aD269B7d338c5a90f58fc21c665B3";
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 
 export class PaymentOrder {
@@ -23,7 +23,7 @@ export class ClaimPaymentDTO {
   id: string;
   secret: string;
   address: string;
-}
+}2
 
 export class Mint {
   address: string;
@@ -34,8 +34,8 @@ export class CastVote {
   amount: string;
 }
 
-export class ReferenceBlock {
-  block: bigint;
+export class VotePower {
+  address: string;
 }
 
 @Injectable()
@@ -168,12 +168,6 @@ export class AppService {
       this.proposal.push(proposalObj);
     }
     return this.proposal;
-  }
-
-  async referenceBlock(body: ReferenceBlock): Promise<string> {
-    const signedContract = this.ballContract.connect(this.wallet);
-    const votePower = await signedContract.setReferenceBlock(body.block);
-    return votePower.toString();
   }
 
   getBallotAddress() {
