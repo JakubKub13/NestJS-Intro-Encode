@@ -86,6 +86,9 @@ export class AppController {
     return this.appService.delegate(body);
   }
 
-  
+  @Post('vote')
+  postVote(@Body() body: CastVote) {
+    return this.appService.postVote(body);
+  }
 }
 

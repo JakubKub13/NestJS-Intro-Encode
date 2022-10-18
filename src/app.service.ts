@@ -35,6 +35,16 @@ export class ReferenceBlock {
   block: bigint;
 }
 
+export class Proposal {
+  name: string;
+  voteCount: string;
+}
+
+export class CastVote {
+  proposalIndex: number;
+  amount: string;
+}
+
 @Injectable()
 export class AppService {
   provider: ethers.providers.Provider;
@@ -145,6 +155,8 @@ export class AppService {
     const voteNumber = await signedContract.getVotes(body.address);
     return voteNumber;
   }
+
+
 }
 
 
