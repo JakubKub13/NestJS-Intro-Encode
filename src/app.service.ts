@@ -23,7 +23,7 @@ export class AppService {
   provider: ethers.providers.JsonRpcProvider;
   contract: ethers.Contract;
 
-  constructor(@InjectModel(Voter.name) private voterName: Model<VoterDocument>) {
+  constructor(@InjectModel(Voter.name) private voterModel: Model<VoterDocument>) {
     this.provider = new ethers.providers.JsonRpcProvider(process.env.GOERLI_RPC_URL);
     this.contract = new ethers.Contract(tokenContractAddressJSON["token-goerli-address"], MyERC20JSON.abi, this.provider);
   }
@@ -44,7 +44,10 @@ export class AppService {
     return { result: tokenBalance };
   }
 
-  
+  async requestVotingTokens(mintVotingTokensDto: MintVotingTokensDto): Promise<Boolean> {
+    const addressToMintTo = mintVotingTokensDto.address;
+    const voterEntry: VoterTypeLocal[] = await this.voterModel.find({ address: addressToMintTo });
+  }
 
 }
 

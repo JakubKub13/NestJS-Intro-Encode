@@ -4,7 +4,7 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 
-import * as G11TokenJSON from './MyERC20Vote.address.json';
+import * as MyERC20JSON from './MyERC20Vote.address.json';
 
 import * as dotenv from 'dotenv';
 dotenv.config();
@@ -15,13 +15,10 @@ export default async (
 ) => {
   try {
     // setup goerli provider
-    const provider = new ethers.providers.AlchemyProvider(
-      'goerli',
-      `${process.env.ALCHEMY_API_KEY}`,
-    );
+    const provider = new ethers.providers.JsonRpcProvider(process.env.GOERLI_RPC_URL);
 
     // connect minter wallet to provider to get signer
-    const wallet = new ethers.Wallet(`${process.env.GOERLI_PRIVATE_KEY}`);
+    const wallet = new ethers.Wallet(`${process.env.PRIVATE_KEY}`);
     const signer = wallet.connect(provider);
 
     // verify balance for minting
@@ -31,15 +28,8 @@ export default async (
     if (balance < 0.01)
       throw new ServiceUnavailableException('Not enough balance!');
 
-    const mintingTxn = await tokenContract
-      .connect(signer)
-      .mint(
-        mintToAddress,
-        ethers.utils.parseEther(G11TokenJSON['TOKEN_PER_MINT_TIME_PERIOD']),
-      );
-
+    const mintingTxn = await tokenContract.connect(signer).mint(mintToAddress, ethers.utils.parseEther(MyERC20JSON['TOKEN_PER_MINT_TIME_PERIOD']));
     await mintingTxn.wait();
-
     return true;
   } catch (error) {
     throw new InternalServerErrorException(
