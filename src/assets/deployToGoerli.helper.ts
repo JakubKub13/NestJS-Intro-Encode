@@ -6,8 +6,8 @@ import {
     getDefaultProvider,
   } from 'ethers';
   import { InternalServerErrorException } from '@nestjs/common';
-  import * as tokenContractAddressJSON from '../token-contract/G11Token.address.json';
-  import * as TokenizedBallotJSON from '../ballot-contract/TokenizedBallot.json';
+  import * as tokenContractAddressJSON from './MyERC20Vote.address.json';
+  import * as TokenizedBallotJSON from './TokenizedBallot.json';
   
   import * as dotenv from 'dotenv';
   dotenv.config();

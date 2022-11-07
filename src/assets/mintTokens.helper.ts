@@ -4,7 +4,7 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 
-import * as G11TokenJSON from '../token-contract/G11Token.address.json';
+import * as G11TokenJSON from './MyERC20Vote.address.json';
 
 import * as dotenv from 'dotenv';
 dotenv.config();

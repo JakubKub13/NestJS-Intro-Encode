@@ -3,7 +3,7 @@ import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PollsController } from './polls.controller';
 import { PollsService } from './polls.service';
-import { Poll, PollDocument } from '../polls/schemas/poll.schema';
+import { Poll, PollDocument } from './schemas/poll.schema';
 
 describe('PollsController', () => {
   let controller: PollsController;
