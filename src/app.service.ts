@@ -28,6 +28,16 @@ export class AppService {
     this.contract = new ethers.Contract(tokenContractAddressJSON["token-goerli-address"], MyERC20JSON.abi, this.provider);
   }
 
+  getTokenContractAddress() {
+    return { result: tokenContractAddressJSON["token-goerli-address"] };
+  }
+
+  async getTotalSupply() {
+    const totalSupplyBn = await this.contract.totalSupply();
+    const totalSupply = ethers.utils.formatEther(totalSupplyBn);
+    return { result: totalSupply };
+  }
+
   
 }
 

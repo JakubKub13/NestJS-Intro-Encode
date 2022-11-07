@@ -12,5 +12,10 @@ export class AppController {
   getTokenContractAddress() {
     return this.appService.getTokenContractAddress();
   }
+
+  @Get('token-total-supply')
+  getTotalSupply() {
+    return this.appService.getTotalSupply();
+  }
 }
 
