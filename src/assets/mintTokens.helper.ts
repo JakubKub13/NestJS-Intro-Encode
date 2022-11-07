@@ -28,6 +28,7 @@ export default async (
     if (balance < 0.01)
       throw new ServiceUnavailableException('Not enough balance!');
 
+      /// check this
     const mintingTxn = await tokenContract.connect(signer).mint(mintToAddress, ethers.utils.parseEther(MyERC20JSON['TOKEN_PER_MINT_TIME_PERIOD']));
     await mintingTxn.wait();
     return true;

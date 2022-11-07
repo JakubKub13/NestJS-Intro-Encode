@@ -46,7 +46,34 @@ export class AppService {
 
   async requestVotingTokens(mintVotingTokensDto: MintVotingTokensDto): Promise<Boolean> {
     const addressToMintTo = mintVotingTokensDto.address;
-    const voterEntry: VoterTypeLocal[] = await this.voterModel.find({ address: addressToMintTo });
+    const voterEntry: VoterTypeLocal[] = await this.voterModel.find({ address: addressToMintTo }).exec();
+
+    if (voterEntry.length !== 0) {
+      // If voter does exist, check isMintingAllowed and if is mint
+      const matchedVoter = voterEntry[0];
+
+      if(!isMintingAllowed(matchedVoter.lastMinEpoch)) throw new BadRequestException('Minting refused !');
+      if(isMintingAllowed(matchedVoter.lastMinEpoch)) {
+        const isMintingSuccess: boolean = await mintTokens(matchedVoter.address, this.contract);
+        if (isMintingSuccess) {
+          matchedVoter.lastMinEpoch = currentEpoch();
+          await matchedVoter.save(); //check this
+          return true;
+        }
+        throw new InternalServerErrorException('Minting failed! (debug info: voter exists in DB)');
+      }
+      return false;
+    } else {
+      const isMintingSuccess: boolean = await mintTokens(addressToMintTo, this.contract);
+      if(!isMintingSuccess) throw new InternalServerErrorException('Minting failed! (Voter was not in DB)');
+      const voterToCreate: VoterTypeLocal = {
+        address: addressToMintTo,
+        lastMinEpoch: currentEpoch()
+      }
+      const createdVoter = new this.voterModel(voterToCreate);
+      await createdVoter.save();
+      return true;
+    }
   }
 
 }
