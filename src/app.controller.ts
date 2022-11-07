@@ -23,5 +23,16 @@ export class AppController {
     if (!isValidAddress(accountAddress)) throw new BadRequestException();
     return this.appService.getAccountTokenBalance(accountAddress);
   }
+
+  @Post('request-voting-tokens')
+  async requestVotingTokens(@Body() body: MintVotingTokensDto) {
+    if (!isValidAddress(body.address)) throw new BadRequestException();
+    const isMinSuccess = await this.appService.requestVotingTokens(body);
+    return { result: isMinSuccess };
+  }
+
+  //register for vote
+
+  //get list of all votes
 }
 
