@@ -6,6 +6,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
   const corsOptions = {
     origin: '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
@@ -14,12 +15,15 @@ async function bootstrap() {
     credentials: true,
     allowedHeaders: 'Content-Type, Accept, Authorization',
   };
+
+  // enable cors for API calls from Angular
   app.enableCors(corsOptions);
+
+
   const config = new DocumentBuilder()
-    .setTitle('API examaple')
-    .setDescription('The example')
+    .setTitle('Tokenized Ballot Dapp')
+    .setDescription('API backend server for Tokenized Ballot dapp on Goerli testnet')
     .setVersion('1.0')
-    .addTag('Example')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
