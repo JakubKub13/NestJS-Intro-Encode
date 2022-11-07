@@ -38,6 +38,11 @@ export class AppService {
     return { result: totalSupply };
   }
 
-  
+  async getAccountTokenBalance(accountAddress: string) {
+    const tokenBalanceBn = await this.contract.balanceOf(accountAddress);
+    const tokenBalance = ethers.utils.formatEther(tokenBalanceBn);
+    return { result: tokenBalance };
+  }
+
 }
 
