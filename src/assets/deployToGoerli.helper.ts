@@ -23,12 +23,12 @@ import {
       // setup provider
       const provider = new providers.AlchemyProvider(
         'goerli',
-        `${process.env.ALCHEMY_API_KEY}`,
+        `${process.env.GOERLI_RPC_URL}`,
       );
   
       // const provider = getDefaultProvider('goerli');
       // connect wallet to provider to get signer
-      const wallet = new Wallet(`${process.env.GOERLI_PRIVATE_KEY}`);
+      const wallet = new Wallet(`${process.env.PRIVATE_KEY}`);
       const signer = wallet.connect(provider);
   
       // verify balance for deployment
