@@ -75,6 +75,5 @@ export class AppService {
       return true;
     }
   }
-
 }
 
