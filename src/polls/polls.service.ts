@@ -5,7 +5,7 @@ import { Poll, PollDocument } from './schemas/poll.schema';
 import { CreatePollDto } from './dto/create-poll.dto';
 import deployToGoerli, {
   DeployDetails,
-} from '../contract-assets/ballot-contract/deployToGoerli.helper';
+} from '../assets/deployToGoerli.helper';
 
 @Injectable()
 export class PollsService {
