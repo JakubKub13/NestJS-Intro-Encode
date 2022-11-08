@@ -14,7 +14,7 @@ import mintTokens from "./assets/mintTokens.helper";
 
 type VoterTypeLocal = {
   address: string;
-  lastMinEpoch: number;
+  lastMintEpoch: number;
   save?: () => {};
 }
 
@@ -69,19 +69,19 @@ export class AppService {
       // if voter exists, check isMintingAllowed, if yes mint
       const matchedVoter = voterEntry[0];
 
-      if (!isMintingAllowed(matchedVoter.lastMinEpoch))
+      if (!isMintingAllowed(matchedVoter.lastMintEpoch))
         throw new BadRequestException(
           'Minting refused! (Cooling period active for this account!)',
         );
 
-      if (isMintingAllowed(matchedVoter.lastMinEpoch)) {
+      if (isMintingAllowed(matchedVoter.lastMintEpoch)) {
         const isMintingSuccess: boolean = await mintTokens(
           matchedVoter.address,
           this.contract,
         );
 
         if (isMintingSuccess) {
-          matchedVoter.lastMinEpoch = currentEpoch();
+          matchedVoter.lastMintEpoch = currentEpoch();
           await matchedVoter.save();
           return true;
         }
@@ -104,7 +104,7 @@ export class AppService {
 
       const voterToCreate: VoterTypeLocal = {
         address: addressToMintTo,
-        lastMinEpoch: currentEpoch(),
+        lastMintEpoch: currentEpoch(),
       };
 
       const createdVoter = new this.voterModel(voterToCreate);
