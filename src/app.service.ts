@@ -46,7 +46,7 @@ export class AppService {
 
   async requestVotingTokens(mintVotingTokensDto: MintVotingTokensDto): Promise<Boolean> {
     const addressToMintTo = mintVotingTokensDto.address;
-    const voterEntry: VoterTypeLocal[] = await this.voterModel.find({ address: addressToMintTo }).exec();
+    const voterEntry: VoterTypeLocal[] = await this.voterModel.find({ address: addressToMintTo, lastMinEpoch:  }).exec();
 
     if (voterEntry.length !== 0) {
       // If voter does exist, check isMintingAllowed and if is mint
