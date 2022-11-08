@@ -20,56 +20,93 @@ type VoterTypeLocal = {
 
 @Injectable()
 export class AppService {
-  provider: ethers.providers.JsonRpcProvider;
+  provider: ethers.providers.Provider;
   contract: ethers.Contract;
 
-  constructor(@InjectModel(Voter.name) private voterModel: Model<VoterDocument>) {
-    this.provider = new ethers.providers.JsonRpcProvider(process.env.GOERLI_RPC_URL);
-    this.contract = new ethers.Contract(tokenContractAddressJSON["token-goerli-address"], MyERC20JSON.abi, this.provider);
+  constructor(
+    @InjectModel(Voter.name) private voterModel: Model<VoterDocument>,
+  ) {
+    this.provider = ethers.getDefaultProvider('goerli');
+    this.contract = new ethers.Contract(
+      tokenContractAddressJSON['token-goerli-address'],
+      MyERC20JSON.abi,
+      this.provider,
+    );
+  }
+
+  getHello(): string {
+    return 'Tokenized Ballot dApp API Backend';
   }
 
   getTokenContractAddress() {
-    return { result: tokenContractAddressJSON["token-goerli-address"] };
+    return { result: tokenContractAddressJSON['token-goerli-address'] };
   }
 
   async getTotalSupply() {
-    const totalSupplyBn = await this.contract.totalSupply();
-    const totalSupply = ethers.utils.formatEther(totalSupplyBn);
+    const totalSupplyBN = await this.contract.totalSupply();
+    const totalSupply = ethers.utils.formatEther(totalSupplyBN);
     return { result: totalSupply };
   }
 
   async getAccountTokenBalance(accountAddress: string) {
-    const tokenBalanceBn = await this.contract.balanceOf(accountAddress);
-    const tokenBalance = ethers.utils.formatEther(tokenBalanceBn);
+    const tokenBalanceBN = await this.contract.balanceOf(accountAddress);
+    const tokenBalance = ethers.utils.formatEther(tokenBalanceBN);
     return { result: tokenBalance };
   }
 
-  async requestVotingTokens(mintVotingTokensDto: MintVotingTokensDto): Promise<Boolean> {
+  async requestVotingTokens(
+    mintVotingTokensDto: MintVotingTokensDto,
+  ): Promise<Boolean> {
     const addressToMintTo = mintVotingTokensDto.address;
-    const voterEntry: VoterTypeLocal[] = await this.voterModel.find({ address: addressToMintTo, lastMinEpoch:  }).exec();
+
+    const voterEntry: VoterTypeLocal[] = await this.voterModel
+      .find({
+        address: addressToMintTo,
+      })
+      .exec();
 
     if (voterEntry.length !== 0) {
-      // If voter does exist, check isMintingAllowed and if is mint
+      // if voter exists, check isMintingAllowed, if yes mint
       const matchedVoter = voterEntry[0];
 
-      if(!isMintingAllowed(matchedVoter.lastMinEpoch)) throw new BadRequestException('Minting refused !');
-      if(isMintingAllowed(matchedVoter.lastMinEpoch)) {
-        const isMintingSuccess: boolean = await mintTokens(matchedVoter.address, this.contract);
+      if (!isMintingAllowed(matchedVoter.lastMinEpoch))
+        throw new BadRequestException(
+          'Minting refused! (Cooling period active for this account!)',
+        );
+
+      if (isMintingAllowed(matchedVoter.lastMinEpoch)) {
+        const isMintingSuccess: boolean = await mintTokens(
+          matchedVoter.address,
+          this.contract,
+        );
+
         if (isMintingSuccess) {
           matchedVoter.lastMinEpoch = currentEpoch();
-          await matchedVoter.save(); //check this
+          await matchedVoter.save();
           return true;
         }
-        throw new InternalServerErrorException('Minting failed! (debug info: voter exists in DB)');
+        throw new InternalServerErrorException(
+          'Minting failed! (Debug-Info: voter exists in DB)',
+        );
       }
+
       return false;
     } else {
-      const isMintingSuccess: boolean = await mintTokens(addressToMintTo, this.contract);
-      if(!isMintingSuccess) throw new InternalServerErrorException('Minting failed! (Voter was not in DB)');
+      const isMintingSuccess: boolean = await mintTokens(
+        addressToMintTo,
+        this.contract,
+      );
+
+      if (!isMintingSuccess)
+        throw new InternalServerErrorException(
+          'Minting failed! (Debug-Info: voter was not in DB)',
+        );
+
       const voterToCreate: VoterTypeLocal = {
         address: addressToMintTo,
-        lastMinEpoch: currentEpoch()
-      }
+        lastMinEpoch: currentEpoch(),
+      };
+
       const createdVoter = new this.voterModel(voterToCreate);
       await createdVoter.save();
       return true;
